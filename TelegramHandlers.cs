@@ -81,11 +81,13 @@ namespace CypherBot
 				"/start" => Usage(botClient, message),
 				"/post" => Post(botClient, message),
 				"/offtopic" => Offtopic(botClient, message),
+				"/off" => Offtopic(botClient, message),
 
 				"/help@cypherpunksbrbot" => Usage(botClient, message),
 				"/start@cypherpunksbrbot" => Usage(botClient, message),
 				"/post@cypherpunksbrbot" => Post(botClient, message),
 				"/offtopic@cypherpunksbrbot" => Offtopic(botClient, message),
+				"/off@cypherpunksbrbot" => Offtopic(botClient, message),
 				_ => null
 			};
 

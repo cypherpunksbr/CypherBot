@@ -5,7 +5,7 @@ namespace CypherBot.Resources
 {
     internal class Messages
     {
-        public static string offtopic_request = @"Acesse nosso grupo offtopic pelo link 🔗 [\#cypherpunks \[OFF\]](" + Links.offtopic + ") 🔗";
+        public static string offtopic_request = @"Acesse nosso grupo offtopic pelo link 🔗 [\#cypherpunks \[OFF\]](" + Props.OfftopicGroupInviteLink + ") 🔗";
         public static string sorteio_group_request;
 
         public static InlineKeyboardMarkup replyMarkupChannelRating(Int64 chatID = 0, int messageID = 0)
