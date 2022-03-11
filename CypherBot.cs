@@ -25,6 +25,14 @@ namespace CypherBot
             CultureInfo.CurrentCulture = ci;
             CultureInfo.CurrentUICulture = ci;
 
+            Data.ChannelPosts.LoadPostsData();
+            Data.SorteioParticipantes.LoadParticipantesData();
+            Data.MessagesToDelete.timerMessageToDeletesData.Elapsed += Data.MessagesToDelete.TimerMessageToDeletesData_Elapsed;
+            Data.MessagesToDelete.LoadMessageToDeletesData();
+            Data.MessagesToDelete.timerMessageToDeletesData.Start();
+
+            Thread.Sleep(1000);
+
             User me = botClient.GetMeAsync().Result;
 
             using var cts = new CancellationTokenSource();
@@ -37,12 +45,6 @@ namespace CypherBot
                                cts.Token);
 
             Console.WriteLine($"Telegram Bot start listening for @{me.Username}");
-
-            Data.ChannelPosts.LoadPostsData();
-            Data.SorteioParticipantes.LoadParticipantesData();
-            Data.MessagesToDelete.timerMessageToDeletesData.Elapsed += Data.MessagesToDelete.TimerMessageToDeletesData_Elapsed;
-            Data.MessagesToDelete.LoadMessageToDeletesData();
-            Data.MessagesToDelete.timerMessageToDeletesData.Start();
 
             while (true)
             {

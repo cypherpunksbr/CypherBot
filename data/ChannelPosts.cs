@@ -43,6 +43,10 @@ namespace CypherBot.Data
             {
                 posts = JsonConvert.DeserializeObject<Dictionary<string, Post>>(File.ReadAllText(Props.dataPostsPatch));
             }
+            else
+            {
+                posts.Add("", new Post());
+            }
             dontWriteFile = false;
         }
 

@@ -128,7 +128,7 @@ namespace CypherBot
 
 			static async Task<Message> Post(ITelegramBotClient botClient, Message message)
 			{
-				string messageToSend = "Sua postagem foi enviada para o [canal](https://t.me/CypherpunksBrasil)";
+				string messageToSend = Tools.StringForkMarkdownV2Use("Sua postagem foi enviada para o canal @CypherpunksBrasil.\n\nSe você não é administrador do grupo Cypherpunks Brasil sua postagem foi enviada para avaliação e será postada assim que for aprovada");
 
 				if (message.ReplyToMessage == null)
 
@@ -157,7 +157,6 @@ namespace CypherBot
 
 					{
 						case Telegram.Bot.Types.Enums.MessageType.Text:
-
 							{
 								StringBuilder postText = new StringBuilder();
 
@@ -167,7 +166,7 @@ namespace CypherBot
 
 								postText.AppendLine(Tools.GetChannelPostDescription(message));
 
-								postMessage = await botClient.SendTextMessageAsync(chatId: Props.postChannelChatId, text: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating(), entities: message.Entities.ToList());
+								postMessage = await botClient.SendTextMessageAsync(chatId: botClient.GetChatMemberAsync(Props.grupoPrincipalChatId, message.From.Id).Result.Status <= ChatMemberStatus.Administrator || botClient.GetChatMemberAsync(Props.moderatorGroupChatId, message.From.Id).Result.Status <= ChatMemberStatus.Member ? Props.postChannelChatId : Props.postChannelPeneiraChatId, text: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating(), entities: message.Entities.ToList());
 
 								Data.ChannelPosts.posts.TryAdd(postMessage.Chat.Id + ":" + postMessage.MessageId, postData);
 							}
@@ -175,7 +174,6 @@ namespace CypherBot
 							break;
 
 						case Telegram.Bot.Types.Enums.MessageType.Document:
-
 							{
 								StringBuilder postText = new StringBuilder();
 
@@ -185,7 +183,7 @@ namespace CypherBot
 
 								postText.AppendLine(Tools.GetChannelPostDescription(message));
 
-								postMessage = await botClient.SendDocumentAsync(chatId: Props.postChannelChatId, document: message.Document.FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating(), captionEntities: message.CaptionEntities);
+								postMessage = await botClient.SendDocumentAsync(chatId: botClient.GetChatMemberAsync(Props.grupoPrincipalChatId, message.From.Id).Result.Status <= ChatMemberStatus.Administrator || botClient.GetChatMemberAsync(Props.moderatorGroupChatId, message.From.Id).Result.Status <= ChatMemberStatus.Member ? Props.postChannelChatId : Props.postChannelPeneiraChatId, document: message.ReplyToMessage.Document.FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
 
 								Data.ChannelPosts.posts.TryAdd(postMessage.Chat.Id + ":" + postMessage.MessageId, postData);
 							}
@@ -193,7 +191,6 @@ namespace CypherBot
 							break;
 
 						case Telegram.Bot.Types.Enums.MessageType.Photo:
-
 							{
 								StringBuilder postText = new StringBuilder();
 
@@ -203,7 +200,7 @@ namespace CypherBot
 
 								postText.AppendLine(Tools.GetChannelPostDescription(message));
 
-								postMessage = await botClient.SendPhotoAsync(chatId: Props.postChannelChatId, photo: message.Photo[0].FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating(), captionEntities: message.CaptionEntities);
+								postMessage = await botClient.SendPhotoAsync(chatId: botClient.GetChatMemberAsync(Props.grupoPrincipalChatId, message.From.Id).Result.Status <= ChatMemberStatus.Administrator || botClient.GetChatMemberAsync(Props.moderatorGroupChatId, message.From.Id).Result.Status <= ChatMemberStatus.Member ? Props.postChannelChatId : Props.postChannelPeneiraChatId, photo: message.ReplyToMessage.Photo[0].FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
 
 								Data.ChannelPosts.posts.TryAdd(postMessage.Chat.Id + ":" + postMessage.MessageId, postData);
 							}
@@ -211,7 +208,6 @@ namespace CypherBot
 							break;
 
 						case Telegram.Bot.Types.Enums.MessageType.Video:
-
 							{
 								StringBuilder postText = new StringBuilder();
 
@@ -221,7 +217,7 @@ namespace CypherBot
 
 								postText.AppendLine(Tools.GetChannelPostDescription(message));
 
-								postMessage = await botClient.SendVideoAsync(chatId: Props.postChannelChatId, video: message.Video.FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating(), captionEntities: message.CaptionEntities);
+								postMessage = await botClient.SendVideoAsync(chatId: botClient.GetChatMemberAsync(Props.grupoPrincipalChatId, message.From.Id).Result.Status <= ChatMemberStatus.Administrator || botClient.GetChatMemberAsync(Props.moderatorGroupChatId, message.From.Id).Result.Status <= ChatMemberStatus.Member ? Props.postChannelChatId : Props.postChannelPeneiraChatId, video: message.ReplyToMessage.Video.FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
 
 								Data.ChannelPosts.posts.TryAdd(postMessage.Chat.Id + ":" + postMessage.MessageId, postData);
 
@@ -230,7 +226,6 @@ namespace CypherBot
 							break;
 
 						case Telegram.Bot.Types.Enums.MessageType.Audio:
-
 							{
 								StringBuilder postText = new StringBuilder();
 
@@ -240,7 +235,7 @@ namespace CypherBot
 
 								postText.AppendLine(Tools.GetChannelPostDescription(message));
 
-								postMessage = await botClient.SendAudioAsync(chatId: Props.postChannelChatId, audio: message.Audio.FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating(), captionEntities: message.CaptionEntities);
+								postMessage = await botClient.SendAudioAsync(chatId: botClient.GetChatMemberAsync(Props.grupoPrincipalChatId, message.From.Id).Result.Status <= ChatMemberStatus.Administrator || botClient.GetChatMemberAsync(Props.moderatorGroupChatId, message.From.Id).Result.Status <= ChatMemberStatus.Member ? Props.postChannelChatId : Props.postChannelPeneiraChatId, audio: message.ReplyToMessage.Audio.FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
 
 								Data.ChannelPosts.posts.TryAdd(postMessage.Chat.Id + ":" + postMessage.MessageId, postData);
 
@@ -249,7 +244,6 @@ namespace CypherBot
 							break;
 
 						case Telegram.Bot.Types.Enums.MessageType.Voice:
-
 							{
 								StringBuilder postText = new StringBuilder();
 
@@ -257,20 +251,17 @@ namespace CypherBot
 
 								postText.AppendLine(Tools.GetChannelPostDescription(message));
 
-								postMessage = await botClient.SendVoiceAsync(chatId: Props.postChannelChatId, voice: message.Voice.FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating(), captionEntities: message.CaptionEntities);
+								postMessage = await botClient.SendVoiceAsync(chatId: botClient.GetChatMemberAsync(Props.grupoPrincipalChatId, message.From.Id).Result.Status <= ChatMemberStatus.Administrator || botClient.GetChatMemberAsync(Props.moderatorGroupChatId, message.From.Id).Result.Status <= ChatMemberStatus.Member ? Props.postChannelChatId : Props.postChannelPeneiraChatId, voice: message.ReplyToMessage.Voice.FileId, caption: postText.ToString(), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
 
 								Data.ChannelPosts.posts.TryAdd(postMessage.Chat.Id + ":" + postMessage.MessageId, postData);
 
 							}
-
 							break;
 
 						default:
-
 							{
 								messageToSend = "Mensagem não suportada";
 							}
-
 							break;
 					}
 				}
@@ -326,7 +317,7 @@ namespace CypherBot
 
 			if (callbackQuery.Data == "ChannelPostLike")
 			{
-				if (Data.ChannelPosts.posts.ContainsKey(callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId))
+				if (Data.ChannelPosts.posts != null && Data.ChannelPosts.posts.ContainsKey(callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId))
 				{
 					if (!Data.ChannelPosts.posts[callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId].PostLikes.Contains(callbackQuery.From.Id))
 					{
@@ -338,12 +329,82 @@ namespace CypherBot
 					{
 						txtAnswerCallbackQuery = "você já votou nesse post";
 					}
+
+					if (callbackQuery.Message.Chat.Id == Props.postChannelPeneiraChatId && botClient.GetChatMemberAsync(Props.grupoPrincipalChatId, callbackQuery.From.Id).Result.Status <= ChatMemberStatus.Administrator || botClient.GetChatMemberAsync(Props.moderatorGroupChatId, callbackQuery.From.Id).Result.Status <= ChatMemberStatus.Member)
+					{
+						Message message = callbackQuery.Message;
+
+						Data.Post postData = new Data.Post()
+						{
+							forwardedFrom = Data.ChannelPosts.posts[callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId].forwardedFrom,
+
+							sentBy = Data.ChannelPosts.posts[callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId].sentBy,
+
+							recomendedBy = Data.ChannelPosts.posts[callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId].recomendedBy,
+
+							PostLikes = Data.ChannelPosts.posts[callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId].PostLikes,
+
+							PostDislikes = Data.ChannelPosts.posts[callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId].PostDislikes
+						};
+
+						Message postMessage = new();
+
+						switch (message.Type)
+						{
+							case Telegram.Bot.Types.Enums.MessageType.Text:
+								{
+									postMessage = await botClient.SendTextMessageAsync(Props.postChannelChatId, Tools.StringForkMarkdownV2Use(message.Text), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating(), entities: message.Entities.ToList());
+								}
+
+								break;
+
+							case Telegram.Bot.Types.Enums.MessageType.Document:
+								{
+									postMessage = await botClient.SendDocumentAsync(Props.postChannelChatId, document: message.Document.FileId, caption: Tools.StringForkMarkdownV2Use(message.Text), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
+								}
+
+								break;
+
+							case Telegram.Bot.Types.Enums.MessageType.Photo:
+								{
+									postMessage = await botClient.SendPhotoAsync(Props.postChannelChatId, photo: message.Photo[0].FileId, caption: Tools.StringForkMarkdownV2Use(message.Text), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
+								}
+
+								break;
+
+							case Telegram.Bot.Types.Enums.MessageType.Video:
+								{
+									postMessage = await botClient.SendVideoAsync(Props.postChannelChatId, video: message.Video.FileId, caption: Tools.StringForkMarkdownV2Use(message.Text), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
+								}
+
+								break;
+
+							case Telegram.Bot.Types.Enums.MessageType.Audio:
+								{
+									postMessage = await botClient.SendAudioAsync(Props.postChannelChatId, audio: message.Audio.FileId, caption: Tools.StringForkMarkdownV2Use(message.Text), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
+								}
+
+								break;
+
+							case Telegram.Bot.Types.Enums.MessageType.Voice:
+								{
+									postMessage = await botClient.SendVoiceAsync(Props.postChannelChatId, voice: message.Voice.FileId, caption: Tools.StringForkMarkdownV2Use(message.Text), parseMode: ParseMode.MarkdownV2, replyToMessageId: message.MessageId, allowSendingWithoutReply: true, replyMarkup: Resources.Messages.replyMarkupChannelRating());
+								}
+								break;
+						}
+
+						Data.ChannelPosts.posts.TryAdd(postMessage.Chat.Id + ":" + postMessage.MessageId, postData);
+
+						botClient.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Post aprovado por " + callbackQuery.From.FirstName + " " + callbackQuery.From.LastName + " [" + callbackQuery.From.Id + "]", replyToMessageId: message.MessageId);
+
+						Data.ChannelPosts.posts.Remove(callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId);
+					}
 				}
 			}
 
 			if (callbackQuery.Data == "ChannelPostDislike")
 			{
-				if (Data.ChannelPosts.posts.ContainsKey(callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId))
+				if (Data.ChannelPosts.posts != null && Data.ChannelPosts.posts.ContainsKey(callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId))
 				{
 					if (!Data.ChannelPosts.posts[callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId].PostDislikes.Contains(callbackQuery.From.Id))
 					{
@@ -354,6 +415,15 @@ namespace CypherBot
 					else
 					{
 						txtAnswerCallbackQuery = "você já votou nesse post";
+					}
+
+					if (callbackQuery.Message.Chat.Id == Props.postChannelPeneiraChatId && botClient.GetChatMemberAsync(Props.grupoPrincipalChatId, callbackQuery.From.Id).Result.Status <= ChatMemberStatus.Administrator || botClient.GetChatMemberAsync(Props.moderatorGroupChatId, callbackQuery.From.Id).Result.Status <= ChatMemberStatus.Member)
+					{
+						Message message = callbackQuery.Message;
+
+						botClient.SendTextMessageAsync(callbackQuery.Message.Chat.Id, "Post recusado por " + callbackQuery.From.FirstName + " " + callbackQuery.From.LastName + " [" + callbackQuery.From.Id + "]", replyToMessageId: message.MessageId);
+
+						Data.ChannelPosts.posts.Remove(callbackQuery.Message.Chat.Id + ":" + callbackQuery.Message.MessageId);
 					}
 				}
 			}
@@ -369,14 +439,12 @@ namespace CypherBot
 
 			InlineQueryResult[] results = {
 			// displayed result
-			new InlineQueryResultArticle(
-				id: "3",
-				title: "TgBots",
-				inputMessageContent: new InputTextMessageContent(
-					"hello"
+				new InlineQueryResultArticle(
+					id: "3",
+					title: "TgBots",
+					inputMessageContent: new InputTextMessageContent("hello")
 				)
-			)
-		};
+			};
 
 			await botClient.AnswerInlineQueryAsync(inlineQueryId: inlineQuery.Id,
 												   results: results,
