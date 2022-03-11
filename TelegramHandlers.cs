@@ -62,13 +62,18 @@ namespace CypherBot
 			{
 				new Task(() =>
 					{
-					Thread.Sleep(10000);
+						foreach (User user in message.NewChatMembers)
+						{
+							if (botClient.GetChatAsync(user.Id).Result.Bio.Contains("BotFilmx", StringComparison.OrdinalIgnoreCase)) { botClient.DeleteMessageAsync(message.Chat.Id, message.MessageId); botClient.BanChatMemberAsync(message.Chat.Id, message.From.Id, DateTime.UtcNow.AddYears(1), true); Console.WriteLine("bot de porno árabe entrou. Mensagem apagada e usuário banido"); }
+						}
 
-					foreach (User user in message.NewChatMembers)
-					{
-						if (botClient.GetChatMemberAsync(message.Chat.Id, user.Id).Result.Status == ChatMemberStatus.Left) { botClient.DeleteMessageAsync(message.Chat.Id, message.MessageId); Console.WriteLine("usuário entrou e saiu. Mensagem apagada"); }
-					}
-				}).Start();
+						Thread.Sleep(10000);
+
+						foreach (User user in message.NewChatMembers)
+						{
+							if (botClient.GetChatMemberAsync(message.Chat.Id, user.Id).Result.Status == ChatMemberStatus.Left) { botClient.DeleteMessageAsync(message.Chat.Id, message.MessageId); Console.WriteLine("usuário entrou e saiu. Mensagem apagada"); }
+						}
+					}).Start();
 			}
 
 			if (message.Type != MessageType.Text) { return; }
