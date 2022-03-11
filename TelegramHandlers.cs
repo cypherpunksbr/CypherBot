@@ -95,7 +95,7 @@ namespace CypherBot
 			{
 				action = message.Text!.ToLowerInvariant().Normalize() switch
 				{
-					string a when a.StartsWith("/") => BarraComandoInutil(botClient, message),
+					// string a when a.StartsWith("/") => BarraComandoInutil(botClient, message),
 					_ => message.Chat.Type == ChatType.Private ? Usage(botClient, message) : null
 				};
 			}
