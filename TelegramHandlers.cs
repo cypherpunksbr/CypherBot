@@ -64,16 +64,34 @@ namespace CypherBot
 					{
 						foreach (User user in message.NewChatMembers)
 						{
-							if (botClient.GetChatAsync(user.Id).Result.Bio.Contains("BotFilmx", StringComparison.OrdinalIgnoreCase)) { botClient.DeleteMessageAsync(message.Chat.Id, message.MessageId); botClient.BanChatMemberAsync(message.Chat.Id, message.From.Id, DateTime.UtcNow.AddYears(1), true); Console.WriteLine("bot de porno árabe entrou. Mensagem apagada e usuário banido"); }
+							Chat newUser = botClient.GetChatAsync(user.Id).Result;
+
+							if (new[] { "BotFilmx", "Filmbot" }.Any(heuristicArabPornWord => newUser.Bio.Contains(heuristicArabPornWord, StringComparison.OrdinalIgnoreCase))) 
+							{ 
+								botClient.DeleteMessageAsync(message.Chat.Id, message.MessageId); 
+								botClient.BanChatMemberAsync(message.Chat.Id, message.From.Id, DateTime.UtcNow.AddYears(1), true); 
+
+								Console.WriteLine("bot de porno árabe entrou. Mensagem apagada e usuário banido por 1 ano"); 
+							}
 						}
+					}).Start();
+
+				new Task(() =>
+				{
+					foreach (User user in message.NewChatMembers)
+					{
+						Chat newUser = botClient.GetChatAsync(user.Id).Result;
 
 						Thread.Sleep(10000);
 
-						foreach (User user in message.NewChatMembers)
+						if (botClient.GetChatMemberAsync(message.Chat.Id, message.From.Id).Result.Status == ChatMemberStatus.Left)
 						{
-							if (botClient.GetChatMemberAsync(message.Chat.Id, user.Id).Result.Status == ChatMemberStatus.Left) { botClient.DeleteMessageAsync(message.Chat.Id, message.MessageId); Console.WriteLine("usuário entrou e saiu. Mensagem apagada"); }
+							botClient.BanChatMemberAsync(message.Chat.Id, message.From.Id, DateTime.UtcNow.AddDays(1), true);
+
+							Console.WriteLine("usuário entrou e saiu. Mensagem apagada e usuário banido por 1 dia");
 						}
-					}).Start();
+					}
+				}).Start();
 			}
 
 			if (message.Type != MessageType.Text) { return; }
