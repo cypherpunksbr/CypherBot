@@ -86,6 +86,7 @@ namespace CypherBot
 
 						if (botClient.GetChatMemberAsync(message.Chat.Id, message.From.Id).Result.Status == ChatMemberStatus.Left)
 						{
+							botClient.DeleteMessageAsync(message.Chat.Id, message.MessageId);
 							botClient.BanChatMemberAsync(message.Chat.Id, message.From.Id, DateTime.UtcNow.AddDays(1), true);
 
 							Console.WriteLine("usuário entrou e saiu. Mensagem apagada e usuário banido por 1 dia");
